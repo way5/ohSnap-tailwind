@@ -21,29 +21,29 @@ Download ohSnap.js:
 
 Within your js:
 
-```js
-import {ohSnap, ohSnapX} from 'ohsnap.js';
+```javascript
+import {ohSnap, ohSnapX} from "ohsnap.js";
 ```
 
 Default options:
 
-```json
+```javascript
 {
-    'title': "",
-    'color': 'base',
-    'icon': 'bell',     // Font Awesome icon name without  "fa-" (ex: fa-bell -> bell)
-    'duration': 7000,   // time is ms
-    'container': 'body', // ex: '#ohsnap', '.ohsnap', etc
-    'fade-duration': 'fast'
+    "title": "",
+    "color": "base",
+    "icon": "bell",     // Font Awesome icon name without  "fa-" (ex: fa-bell -> bell)
+    "duration": 7000,   // time is ms
+    "container": "body", // ex: "#ohsnap", ".ohsnap", etc
+    "fade-duration": "fast"
 }
 ```
 
 To call a notification, use `ohSnap(text, options)`. Examples :
 
-```js
+```javascript
 ohSnap('Succefully created your account');
 ohSnap('Oh Snap! I cannot process your card...', {color: 'red', icon: 'pizza-slice'});
-ohSnap('Yeeaahh! You are now registered.', {time: '2000'});
+ohSnap('Yeeaahh! You are now registered.', {duration: 2000});
 ```
 
 To remove a notification, use `ohSnapX()`.
@@ -54,7 +54,7 @@ Alerts are automatically bound to a click event (internally, `ohSnapX()` is call
 
 - **tailwind.conf.js**
 
-```json
+```javascript
 ...
 module.exports = {
     ...
