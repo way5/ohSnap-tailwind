@@ -1,0 +1,87 @@
+.ohsnap-wrapper {
+    @apply absolute top-8 right-6 smdn:right-0 smdn:w-full smdn:justify-center flex z-[100] overflow-visible;
+
+    .ohsnap-container {
+        @apply flex items-center shadow-2xl rounded px-4 py-2 text-white justify-between text-base;
+
+        .content {
+            @apply min-w-[180px] max-w-[280px] pr-3;
+
+            .title {
+                @apply font-bold text-[24px] m-0;
+            }
+
+            p {
+                @apply text-[13px] pb-2;
+            }
+        }
+
+        .icon {
+            @apply text-lg w-12 h-12 p-2 ml-2 rounded-full text-center items-center;
+        }
+    }
+
+    .ohsnap-base {
+        @apply bg-indigo-500;
+
+        .title {
+            @apply text-indigo-900;
+        }
+
+        .content {
+            @apply text-white;
+        }
+
+        .icon {
+            @apply bg-indigo-600 text-indigo-900;
+        }
+    }
+
+    .ohsnap-success {
+        @apply bg-green-500;
+
+        .title {
+            @apply text-green-900;
+        }
+
+        .content {
+            @apply text-white;
+        }
+
+        .icon {
+            @apply bg-green-600 text-green-900;
+        }
+    }
+
+    .ohsnap-warning {
+        @apply bg-yellow-600;
+
+        .title {
+            @apply text-yellow-900;
+        }
+
+        .content {
+            @apply text-black;
+        }
+
+        .icon {
+            @apply bg-yellow-700 text-yellow-900;
+        }
+    }
+
+    .ohsnap-error {
+        @apply bg-red-500;
+
+        .title {
+            @apply text-red-900;
+        }
+
+        .content {
+            @apply text-white;
+        }
+
+        .icon {
+            @apply bg-red-600 text-red-900;
+        }
+    }
+}
