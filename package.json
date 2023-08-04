@@ -1,6 +1,17 @@
 {
-    "name": "oh-snap",
-    "version": "1.1.0",
+    "name": "ohsnap-tailwind",
+    "version": "1.2.0",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Sergey Ko",
+            "url": "https://github.com/way5/ohSnap-tailwind"
+        },
+        {
+            "name": "justindomingue",
+            "url": "https://github.com/justindomingue/ohSnap"
+        }
+    ],
     "description": "A simple jQuery/Zepto notification library designed to be used in mobile apps",
     "main": "ohsnap.js",
     "scripts": {
@@ -15,10 +26,8 @@
         "tailwind",
         "fontawesome"
     ],
-    "author": "justindomingue",
-    "license": "MIT",
     "bugs": {
         "url": "https://github.com/way5/ohSnap-tailwing/issues"
     },
-    "homepage": "https://github.com/justindominbue/ohSnap#readme"
+    "homepage": "https://github.com/way5/ohSnap-tailwind"
 }

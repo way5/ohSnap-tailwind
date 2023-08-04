@@ -1,27 +1,36 @@
-OhSnap!.js
+Notification library based on OhSnap!.js
 =========
 
-> Oh Snap ! The server crashed... Try again later :D
-
-A simple jQuery/Zepto notification library designed to be used in mobile apps by **[Justin Domingue](https://github.com/justindomingue)**
-
-Check out this [demo page](http://justindomingue.github.io/ohSnap/ "Demo")
+A simple jQuery/Zepto library originnally designed by **[Justin Domingue](https://github.com/justindomingue)**
 
 ## Installation
------
 
-Dependency: [jQuery](http://jquery.com) or [Zepto](http://zeptojs.com).
+Dependencies: 
 
-Download ohSnap.js:
-- from [Github](https://raw.githubusercontent.com/way5/ohSnap-tailwind/tailwind/ohsnap.js)
-- with Yarn: <code>yarn add oh-snap</code>
+```bash
+yarn add jquery
+```
+or
+```bash
+yarn add zepto
+```
+optional
+```bash
+yarn add @fortawesome/fontawesome-free
+```
+
+Download **ohSnap** using Yarn: 
+```bash
+yarn add ohsnap-tailwind
+```
 
 ## Usage
------
+
 
 Within your js:
 
 ```javascript
+import "ohsnap.js/ohsnap.scss";
 import {ohSnap, ohSnapX} from "ohsnap.js";
 ```
 
@@ -29,12 +38,48 @@ Default options:
 
 ```javascript
 {
-    "title": "",
-    "color": "base",
-    "icon": "bell",     // Font Awesome icon name without  "fa-" (ex: fa-bell -> bell)
-    "duration": 7000,   // time is ms
-    "container": "body", // ex: "#ohsnap", ".ohsnap", etc
-    "fade-duration": "fast"
+    "title": undefined,                 // alert title. Default: undefined
+    "color": undefined,                 // alert will have class 'ohsnap-color'. Default: 'success'
+    "styles": undefined,                // object ex.: {'bg': 'bg-color dark:bg-color','border': 'border-color dark:border-color', 
+                                        // 'icon': 'bg-color dark:bg-color'} where border and icon are optional. Default: undefined  (no icon is shown)
+    "icon": unndefined,                 // FontAwesome icon name that contains icon background image. Default: undefined (no icon is shown)
+    "duration": 7000,                   // how long alert would be displayed in ms. Default: 7000ms
+    "container": 'body',                // wrapper element for all the alerts. Example: #some-class, .a-class, etc. Default: body
+    "fadein-duration": 400,             // duration of the fadein. Default: 'fast'
+    "fadeout-duration": 'slow',         // duration of the fadeOut. Default: 'fast'
+    "top": 36,                          // initial vertical offset in pixels
+    "right": 36,                        // initial horizontal offset in pixels
+    "type": 'linear'                    // how to display the sequence of onSnaps (linear | isostack | vstack)
+}
+```
+
+Example:
+
+```javascript
+{
+    "title": "Notification",
+    "styles": {
+        "bg": "yellow-500",
+        "border": "yellow-700",
+        "icon": "info-icon bg-white bg-[length:28px_28px] bg-no-repeat bg-center"
+    },
+    "duration": 5000,
+    "fadeout": "fast"
+}
+```
+
+of with FontAwesome:
+
+```javascript
+{
+    "title": "Notification",
+    "styles": {
+        "bg": "yellow-500",
+        "border": "yellow-700",
+    },
+    "icon": "bell",
+    "duration": 5000,
+    "fadein": "fast"
 }
 ```
 
@@ -42,8 +87,8 @@ To call a notification, use `ohSnap(text, options)`. Examples :
 
 ```javascript
 ohSnap('Succefully created your account');
-ohSnap('Oh Snap! I cannot process your card...', {color: 'red', icon: 'pizza-slice'});
-ohSnap('Yeeaahh! You are now registered.', {duration: 2000});
+ohSnap('Oh Snap! I cannot process your card...', {'styles': { 'bg': 'red-500', 'icon': 'pizza-slice'}});
+ohSnap('Yeeaahh! You are now registered.', {'duration': 2000});
 ```
 
 To remove a notification, use `ohSnapX()`.
@@ -58,6 +103,15 @@ Alerts are automatically bound to a click event (internally, `ohSnapX()` is call
 ...
 module.exports = {
     ...
+    safelist: [
+        {
+            // specify background colors that would always be loaded
+            pattern: /bg-(yellow|green|indigo|red)-500/,
+        }, {
+            // specify border colors that would always be loaded
+            pattern: /border-(yellow|green|indigo|red)-600/,
+        }
+    ],
     theme: {
         colors: {
             ...

@@ -1,92 +1,108 @@
-/**
-* == OhSnap!.js ==
-* A simple jQuery/Zepto notification library designed to be used in mobile apps
-*
-* author: Justin Domingue
-* date: september 18, 2015
-* version: 1.1.0
-* copyright: MIT License (MIT)
-#####################################################################################
-CHANGELOG:
-- 2023/01/04 - added title, optimized for tailwind
-#####################################################################################
-*/
+/*
+ * ###################################################################################
+ *  File: ohsnap.js
+ *  File Created: Thursday, 3rd August 2023 5:36:14 pm
+ *  Author: Sergey Ko
+ *  Last Modified: Thursday, 3rd August 2023 10:55:38 pm
+ *  Modified By: Sergey Ko
+ *  License: MIT License (MIT)
+ *  Original author: Justin Domingue
+ * ###################################################################################
+ *  CHANGELOG:
+ * - 2023/01/04 - added title, optimized for tailwind
+ * - 2023/03/08 - optimization + new features
+ * ###################################################################################
+ */
 
 /**
  * Shows a toast on the page
  *
- * @param string text - text to show
- * @param {
-*      title: alert title. Default: null
-*      color: alert will have class 'alert-color'. Default: null
-*      icon: class of the icon to show before the alert. Default: null
-*      duration: duration of the notification in ms. Default: 5000ms
-*      container: wrapper element for all the alerts. Example: #some-class, .a-class, etc. Default: body
-*      fade-duration: duration of the fade in/out of the alerts. Default: 'fast'
-* } options - object that can override the following options
+ * @param string text to show
+ * @param object {
+ *      title: alert title. Default: undefined
+ *      color: alert will have class 'ohsnap-color'. Default: 'success'
+ *      styles: object ex.: {'bg': 'bg-color dark:bg-color','border': 'border-color dark:border-color', 'icon': 'bg-color dark:bg-color'}
+ *                where border is optional. Default: undefined
+ *      icon: FontAwesome icon name that contains icon background image. Default: undefined (no icon is shown)
+ *      duration: how long alert would be displayed in ms. Default: 7000ms
+ *      container: wrapper element for all the alerts. Example: #some-class, .a-class, etc. Default: body
+ *      fadein: duration of the fadeIn. Default: 'fast'
+ *      fadeout: duration of the fadeOut. Default: 'fast'
+ *      top: initial vertical offset in pixels
+ *      right: initial horizontal offset in pixels
+ *      type: how to display the sequence of onSnaps (linear | isostack | vstack)
+ * }
 *
 */
 export function ohSnap(text, options) {
     var defaultOptions = {
-        'title': null,
-        'color': 'base',
-        'icon': null,
+        'title': undefined,
+        'color': undefined,
+        'styles': undefined,  // {'bg': 'bg-color dark:bg-color','border': 'border-color dark:border-color', 'icon': 'bg-color dark:bg-color'}
+        'icon': undefined,
         'duration': 7000,
         'container': 'body',
-        'fade-duration': 'fast'
+        'fadein': 'fast',
+        'fadeout': 'fast',
+        'top': 36,
+        'right': 36,
+        'type': 'isostack'       // linear | isostack | vstack
     }
 
     options = (typeof options == 'object') ? $.extend(defaultOptions, options) : defaultOptions;
 
     var $container = $(options['container']),
-        icon_markup = "",
         color_markup = "",
+        icon_markup = "",
         title = "";
 
-    if (options.color) {
+    if(options.styles === undefined) {
         color_markup = 'ohsnap-' + options.color;
-        if (options.icon === null) {
-            switch (options.color) {
-                case 'error':
-                    options.icon = 'bug';
-                    break;
-                case 'warning':
-                    options.icon = 'triangle-exclamation';
-                    break;
-                case 'success':
-                    options.icon = 'thumbs-up';
-                    break;
-                default:
-                    options.icon = 'bell';
-                    break;
-            }
-        }
+    } else {
+        color_markup = options.styles.bg;
+        if(options.styles.border !== undefined)
+            color_markup += ' border ' + options.styles.border;
     }
 
-    if (options.icon) {
-        icon_markup = "<i class='fas fa-" + options.icon + "'></i> ";
-    }
-
-    if (options.title) {
+    if (options.title !== undefined) {
         title = '<h4 class="title">' + options.title + '</h4>';
     }
 
+    if(options.icon !== undefined) {
+        icon_markup = '<i class="fas fa-"'+options.icon + '"></i>';
+    }
+
+    // how many are already displayed
+    $('.ohsnap-wrapper').each((i, e) => {
+        let t = 1.1, r = 0;
+        if(options.type === 'isostack') {
+            t = 0.1;
+            r = 0.03;
+        } else if(options.type === 'vstack')
+            t = 0.2;
+        options.top += Math.round($(e).height() * t);
+        options.right += Math.round($(e).width() * r);
+    });
+
     // Generate the HTML
-    //   var html = $('<div class="alert ' + color_markup + '">' + icon_markup + text + '</div>').fadeIn(options['fade-duration']);
-    var html = $('<div class="ohsnap-wrapper">' +
-        '<div class="ohsnap-container ' + color_markup + '">' +
-        '<div class="content">' +
-        title +
-        '<p>' + text + '</p>' +
-        '</div>' +
-        '<div class="icon">' +
-        icon_markup +
-        '</div>' +
-        '</div>' +
-        '</div>'); //.fadeIn(options['fade-duration']);
+    const html = $('<div>', { 'class': 'ohsnap-wrapper', 'style': 'top:' + options.top + 'px;right:' + options.right +'px' });
+    const d0 = $('<div>', {'class': 'ohsnap-container ' + color_markup});
+    const d1 = $('<div>', {'class': 'content'});
+    d1.html(title + '<p>' + text + '</p>');
+    d0.append(d1);
+    if(options.icon || options.styles.icon) {
+        const d2 = $('<div>', {'class': 'icon-wrapper ' + (options.styles !== undefined && options.styles.icon !== undefined
+                    ? options.styles.icon : '')});
+        if(icon_markup !== "")
+            d2.html(icon_markup);
+        d2.addClass(options.icon);
+        d0.append(d2);
+    }
+    html.append(d0).hide();
 
     // Append the label to the container
     $container.append(html);
+    html.fadeIn(options['fadein']);
 
     // Remove the notification on click
     html.on('click', function (e) {
@@ -116,17 +132,17 @@ export function ohSnap(text, options) {
 */
 export function ohSnapX(element, options) {
     var defaultOptions = {
-        'fade-duration': 'fast'
-    }
+        'fadeout': 'fast'
+    };
 
     options = (typeof options == 'object') ? $.extend(defaultOptions, options) : defaultOptions;
 
     if (typeof element !== "undefined") {
-        element.fadeOut(options['fade-duration'], function () {
+        element.fadeOut(options['fadeout'], function () {
             $(this).remove();
         });
     } else {
-        $('.ohsnap-wrapper').fadeOut(options['fade-duration'], function () {
+        $('.ohsnap-wrapper').fadeOut(options['fadeout'], function () {
             $(this).remove();
         });
     }
