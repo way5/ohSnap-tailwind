@@ -1,7 +1,7 @@
 Notification library based on OhSnap!.js
 =========
 
-A simple jQuery/Zepto library originnally designed by **[Justin Domingue](https://github.com/justindomingue)**
+A simple jQuery/Zepto library originally designed by **[Justin Domingue](https://github.com/justindomingue)**
 
 ## Installation
 
@@ -26,8 +26,7 @@ yarn add ohsnap-tailwind
 
 ## Usage
 
-
-Within your js:
+Import ohSnap:
 
 ```javascript
 import "ohsnap.js/ohsnap.scss";
@@ -42,11 +41,11 @@ Default options:
     "color": undefined,                 // alert will have class 'ohsnap-color'. Default: 'success'
     "styles": undefined,                // object ex.: {'bg': 'bg-color dark:bg-color','border': 'border-color dark:border-color', 
                                         // 'icon': 'bg-color dark:bg-color'} where border and icon are optional. Default: undefined  (no icon is shown)
-    "icon": unndefined,                 // FontAwesome icon name that contains icon background image. Default: undefined (no icon is shown)
+    "icon": undefined,                 // FontAwesome icon name that contains icon background image. Default: undefined (no icon is shown)
     "duration": 7000,                   // how long alert would be displayed in ms. Default: 7000ms
     "container": 'body',                // wrapper element for all the alerts. Example: #some-class, .a-class, etc. Default: body
-    "fadein-duration": 400,             // duration of the fadein. Default: 'fast'
-    "fadeout-duration": 'slow',         // duration of the fadeOut. Default: 'fast'
+    "fadein": 400,                      // duration of the fadein. Default: 'fast'
+    "fadeout": 'slow',                  // duration of the fadeOut. Default: 'fast'
     "top": 36,                          // initial vertical offset in pixels
     "right": 36,                        // initial horizontal offset in pixels
     "type": 'linear'                    // how to display the sequence of onSnaps (linear | isostack | vstack)
@@ -78,7 +77,7 @@ of with FontAwesome:
         "border": "yellow-700",
     },
     "icon": "bell",
-    "duration": 5000,
+    "duration": 3000,
     "fadein": "fast"
 }
 ```
@@ -91,7 +90,7 @@ ohSnap('Oh Snap! I cannot process your card...', {'styles': { 'bg': 'red-500', '
 ohSnap('Yeeaahh! You are now registered.', {'duration': 2000});
 ```
 
-To remove a notification, use `ohSnapX()`.
+To remove particular notification use `ohSnapX(ohsnap-wrapper-element)`, or `ohSnapX()` to remove them all.
 
 Alerts are automatically bound to a click event (internally, `ohSnapX()` is called when the alert is clicked).
 
