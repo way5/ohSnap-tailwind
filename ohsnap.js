@@ -3,7 +3,7 @@
  *  File: ohsnap.js
  *  File Created: Thursday, 3rd August 2023 5:36:14 pm
  *  Author: Sergey Ko
- *  Last Modified: Thursday, 3rd August 2023 10:55:38 pm
+ *  Last Modified: Friday, 4th August 2023 11:18:09 am
  *  Modified By: Sergey Ko
  *  License: MIT License (MIT)
  *  Original author: Justin Domingue
@@ -48,7 +48,7 @@ export function ohSnap(text, options) {
         'right': 36,
         'type': 'isostack'       // linear | isostack | vstack
     }
-
+    options === undefined && console.warn('ohSnap options is undefined');
     options = (typeof options == 'object') ? $.extend(defaultOptions, options) : defaultOptions;
 
     var $container = $(options['container']),
@@ -90,12 +90,13 @@ export function ohSnap(text, options) {
     const d1 = $('<div>', {'class': 'content'});
     d1.html(title + '<p>' + text + '</p>');
     d0.append(d1);
-    if(options.icon || options.styles.icon) {
+    if(options.icon !== void 0 || (options.styles !== void 0 && options.styles.icon !== void 0)) {
         const d2 = $('<div>', {'class': 'icon-wrapper ' + (options.styles !== undefined && options.styles.icon !== undefined
                     ? options.styles.icon : '')});
         if(icon_markup !== "")
             d2.html(icon_markup);
-        d2.addClass(options.icon);
+        else
+            d2.addClass(options.icon);
         d0.append(d2);
     }
     html.append(d0).hide();
