@@ -21,7 +21,7 @@ yarn add @fortawesome/fontawesome-free
 
 Download **ohSnap** using Yarn: 
 ```bash
-yarn add ohsnap-tailwind
+yarn add way5/ohsnap-tailwind
 ```
 
 ## Usage
@@ -29,8 +29,8 @@ yarn add ohsnap-tailwind
 Import ohSnap:
 
 ```javascript
-import "ohsnap.js/ohsnap.scss";
-import {ohSnap, ohSnapX} from "ohsnap.js";
+import "ohsnap-tailwind/ohsnap.scss";
+import {ohSnap, ohSnapX} from "ohsnap-tailwind";
 ```
 
 Default options:
