@@ -3,7 +3,7 @@
  *  File: ohsnap.js
  *  File Created: Thursday, 3rd August 2023 5:36:14 pm
  *  Author: Sergey Ko
- *  Last Modified: Friday, 4th August 2023 11:18:09 am
+ *  Last Modified: Friday, 1st September 2023 10:25:14 pm
  *  Modified By: Sergey Ko
  *  License: MIT License (MIT)
  *  Original author: Justin Domingue
@@ -11,6 +11,7 @@
  *  CHANGELOG:
  * - 2023/01/04 - added title, optimized for tailwind
  * - 2023/03/08 - optimization + new features
+ * - 2023/09/02 - test for fadeIn/Out
  * ###################################################################################
  */
 
@@ -26,8 +27,8 @@
  *      icon: FontAwesome icon name that contains icon background image. Default: undefined (no icon is shown)
  *      duration: how long alert would be displayed in ms. Default: 7000ms
  *      container: wrapper element for all the alerts. Example: #some-class, .a-class, etc. Default: body
- *      fadein: duration of the fadeIn. Default: 'fast'
- *      fadeout: duration of the fadeOut. Default: 'fast'
+ *      fadein: duration of the fadeIn. It has no effect if the core lib has no fadeIn method. Default: 'fast'
+ *      fadeout: duration of the fadeOut. It has no effect if the core lib has no fadeOut method. Default: 'fast'
  *      top: initial vertical offset in pixels
  *      right: initial horizontal offset in pixels
  *      type: how to display the sequence of onSnaps (linear | isostack | vstack)
@@ -85,7 +86,7 @@ export function ohSnap(text, options) {
     });
 
     // Generate the HTML
-    const html = $('<div>', { 'class': 'ohsnap-wrapper', 'style': 'top:' + options.top + 'px;right:' + options.right +'px' });
+    const el = $('<div>', { 'class': 'ohsnap-wrapper', 'style': 'top:' + options.top + 'px;right:' + options.right +'px' });
     const d0 = $('<div>', {'class': 'ohsnap-container ' + color_markup});
     const d1 = $('<div>', {'class': 'content'});
     d1.html(title + '<p>' + text + '</p>');
@@ -99,25 +100,28 @@ export function ohSnap(text, options) {
             d2.addClass(options.icon);
         d0.append(d2);
     }
-    html.append(d0).hide();
+    el.append(d0).hide();
 
     // Append the label to the container
-    $container.append(html);
-    html.fadeIn(options['fadein']);
+    $container.append(el);
+    if(typeof el.fadeIn !== 'undefined')
+        el.fadeIn(options['fadein']);
+    else
+        el.show();
 
     // Remove the notification on click
-    html.on('click', function (e) {
+    el.on('click', function (e) {
         ohSnapX($(this));
     });
 
     // After 'duration' seconds, the animation fades out
     if (options.duration != 0) {
         setTimeout(function () {
-            ohSnapX(html);
+            ohSnapX(el);
         }, options.duration);
     } else {
         $('.ohsnap-wrapper').on('click', (e) => {
-            ohSnapX(html);
+            ohSnapX(el);
         });
     }
 }
@@ -136,15 +140,15 @@ export function ohSnapX(element, options) {
         'fadeout': 'fast'
     };
 
-    options = (typeof options == 'object') ? $.extend(defaultOptions, options) : defaultOptions;
+    options = (typeof options === 'object') ? $.extend(defaultOptions, options) : defaultOptions;
 
-    if (typeof element !== "undefined") {
-        element.fadeOut(options['fadeout'], function () {
+    let el = (typeof element !== 'undefined') ? element : $('.ohsnap-wrapper');
+
+    if(typeof el.fadeOut !== 'undefined') {
+        el.fadeOut(options['fadeout'], function () {
             $(this).remove();
         });
     } else {
-        $('.ohsnap-wrapper').fadeOut(options['fadeout'], function () {
-            $(this).remove();
-        });
+        el.hide();
     }
 }

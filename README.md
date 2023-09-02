@@ -30,7 +30,7 @@ Import ohSnap:
 
 ```javascript
 import "ohsnap-tailwind/ohsnap.scss";
-import {ohSnap, ohSnapX} from "ohsnap-tailwind";
+import { ohSnap, ohSnapX } from "ohsnap-tailwind";
 ```
 
 Default options:
